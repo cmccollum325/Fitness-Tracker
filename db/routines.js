@@ -3,12 +3,12 @@ const { attachActivitiesToRoutines } = require('./activities')
 const { getUserByUsername } = require('./users')
 const util = require('./util');
 
-async function getRoutineById(id){
+async function getRoutineById(routineId){
   try {
     const {rows: [routine]} = await client.query(`
       SELECT * FROM routines
       WHERE id = $1
-    `, [id]);
+    `, [routineId]);
     return routine;
   } catch (error) {
     throw error;

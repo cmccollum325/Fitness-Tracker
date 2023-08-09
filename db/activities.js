@@ -12,17 +12,19 @@ async function getAllActivities(){
     throw error;
   }
 }
-async function getActivityById(id){
+
+async function getActivityById(activityId){
   try {
-    const {rows: [activity]} = await client.query(`
+    const {rows: [activity] } = await client.query(`
       SELECT * FROM activities
       WHERE id = $1
-    `, [id]);
+    `, [activityId]);
     return activity;
   } catch (error) {
     throw error;
   }
 }
+
 async function getActivityByName(name){
   try {
     const {rows: [activity]} = await client.query(`

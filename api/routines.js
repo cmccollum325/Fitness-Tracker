@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllPublicRoutines, createRoutine, updateRoutine, getRoutineById, destroyRoutine, addActivityToRoutine, getRoutineActivitiesByRoutine } = require('../db');
+const { getAllPublicRoutines, createRoutine, updateRoutine, getRoutineById, destroyRoutine, addActivityToRoutine, getRoutineActivitiesByRoutine, getPublicRoutinesByActivity } = require('../db');
 const { requireUser, requiredNotSent } = require('./utils')
 
 
@@ -15,6 +15,23 @@ router.get('/', async (req, res, next) => {
     next(error)
   }
 })
+
+// get /api/routines/:routineId
+router.get('/:routineId', async (req, res, next) => {
+
+  try{
+    console.log(req.params);
+    const routine = await getRoutineById(req.params.routineId);
+
+    res.send(routine);
+
+  } catch (err) {
+    
+    next(err)
+
+  }
+})
+
 
 // POST /api/routines
 router.post('/', requireUser, requiredNotSent({requiredParams: ['name', 'goal']}), async (req, res, next) => {

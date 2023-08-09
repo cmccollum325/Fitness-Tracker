@@ -3,6 +3,32 @@ const router = express.Router();
 const { getAllActivities, getActivityById, getActivityByName, createActivity, updateActivity, getPublicRoutinesByActivity } = require('../db');
 const { requireUser, requiredNotSent } = require('./utils')
 
+// GET /api/activities
+router.get('/', async (req, res, next) => {
+  try {
+    const activities = await getAllActivities();
+    res.send(activities);
+  } catch (error) {
+    next(error)
+  }
+})
+
+// get /api/activities/:activityId
+router.get('/:activityId', async (req, res, next) => {
+
+  try{
+    console.log(req.params);
+    const activity = await getActivityById(req.params.activityId);
+
+    res.send(activity);
+
+  } catch (err) {
+    
+    next(err)
+  }
+})
+
+
 // GET /api/activities/:activityId/routines
 router.get('/:activityId/routines', async (req, res, next) => {
   try {
@@ -20,15 +46,7 @@ router.get('/:activityId/routines', async (req, res, next) => {
   }
 });
 
-// GET /api/activities
-router.get('/', async (req, res, next) => {
-  try {
-    const activities = await getAllActivities();
-    res.send(activities);
-  } catch (error) {
-    next(error)
-  }
-})
+
 
 // POST /api/activities
 router.post('/', requireUser, requiredNotSent({requiredParams: ['name', 'description']}), async (req, res, next) => {
